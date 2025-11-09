@@ -1,0 +1,32 @@
+server:
+  port: ${CORE_SERVICE_PORT:5010}
+
+spring:
+  application:
+    name: core-service
+  datasource:
+    url: ${CORE_MYSQL_URL:jdbc:mysql://localhost:3307/finwise_core?createDatabaseIfNotExist=true&serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true}
+    username: ${CORE_MYSQL_USER:core_user}
+    password: ${CORE_MYSQL_PASSWORD:core_password}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+    open-in-view: false
+  graphql:
+    graphiql:
+      enabled: true
+    schema:
+      locations: classpath:graphql/
+
+logging:
+  level:
+    root: INFO
+    com.finwise.core: DEBUG
+
+finwise:
+  notification:
+    url: ${NOTIFICATION_SERVICE_URL:http://localhost:5025/graphql}

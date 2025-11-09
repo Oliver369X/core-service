@@ -1,0 +1,14 @@
+query AccountById($id: ID!) {
+  accountById(id: $id) {
+    id
+    name
+    balance
+    currency
+    transactions(limit: 10) {
+      id
+      amount
+      type
+    }
+  }
+}
+

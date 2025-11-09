@@ -1,0 +1,137 @@
+scalar BigDecimal
+scalar Date
+scalar DateTime
+
+type _Service {
+  sdl: String!
+}
+
+enum AccountType {
+  SAVINGS
+  CHECKING
+  CREDIT
+  CASH
+  INVESTMENT
+}
+
+enum TransactionType {
+  INCOME
+  EXPENSE
+}
+
+type Account {
+  id: ID!
+  userId: String!
+  name: String!
+  type: AccountType!
+  balance: BigDecimal!
+  currency: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  transactions(limit: Int, from: DateTime, to: DateTime): [Transaction!]!
+}
+
+type Transaction {
+  id: ID!
+  account: Account!
+  type: TransactionType!
+  amount: BigDecimal!
+  description: String
+  occurredAt: DateTime!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Budget {
+  id: ID!
+  userId: String!
+  category: String!
+  limitAmount: BigDecimal!
+  periodStart: Date!
+  periodEnd: Date!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Goal {
+  id: ID!
+  userId: String!
+  name: String!
+  targetAmount: BigDecimal!
+  currentAmount: BigDecimal!
+  targetDate: Date
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Query {
+  accountsByUser(userId: String!): [Account!]!
+  accountById(id: ID!): Account
+  budgetsByUser(userId: String!, activeOnly: Boolean = true): [Budget!]!
+  goalsByUser(userId: String!): [Goal!]!
+  _service: _Service!
+}
+
+input CreateAccountInput {
+  userId: String!
+  name: String!
+  type: AccountType!
+  balance: BigDecimal = 0
+  currency: String! = "USD"
+}
+
+input UpdateAccountInput {
+  id: ID!
+  name: String
+  type: AccountType
+  currency: String
+}
+
+input RegisterTransactionInput {
+  accountId: ID!
+  type: TransactionType!
+  amount: BigDecimal!
+  description: String
+  occurredAt: DateTime
+}
+
+input CreateBudgetInput {
+  userId: String!
+  category: String!
+  limitAmount: BigDecimal!
+  periodStart: Date!
+  periodEnd: Date!
+}
+
+input UpdateBudgetInput {
+  id: ID!
+  limitAmount: BigDecimal
+  periodStart: Date
+  periodEnd: Date
+}
+
+input CreateGoalInput {
+  userId: String!
+  name: String!
+  targetAmount: BigDecimal!
+  currentAmount: BigDecimal!
+  targetDate: Date
+}
+
+input UpdateGoalProgressInput {
+  id: ID!
+  currentAmount: BigDecimal!
+}
+
+type Mutation {
+  createAccount(input: CreateAccountInput!): Account!
+  updateAccount(input: UpdateAccountInput!): Account!
+  deleteAccount(id: ID!): Boolean!
+  registerTransaction(input: RegisterTransactionInput!): Transaction!
+  createBudget(input: CreateBudgetInput!): Budget!
+  updateBudget(input: UpdateBudgetInput!): Budget!
+  deleteBudget(id: ID!): Boolean!
+  createGoal(input: CreateGoalInput!): Goal!
+  updateGoalProgress(input: UpdateGoalProgressInput!): Goal!
+  deleteGoal(id: ID!): Boolean!
+}

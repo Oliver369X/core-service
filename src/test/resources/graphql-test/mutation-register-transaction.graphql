@@ -1,0 +1,10 @@
+mutation RegisterTransaction($input: RegisterTransactionInput!) {
+  registerTransaction(input: $input) {
+    id
+    amount
+    type
+    description
+    occurredAt
+  }
+}
+

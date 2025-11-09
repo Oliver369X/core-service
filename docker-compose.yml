@@ -1,0 +1,33 @@
+version: "3.9"
+
+services:
+  core-db:
+    image: mysql:8.4.0
+    container_name: finwise-core-db
+    restart: always
+    environment:
+      MYSQL_DATABASE: finwise_core
+      MYSQL_USER: core_user
+      MYSQL_PASSWORD: core_password
+      MYSQL_ROOT_PASSWORD: root_password
+    ports:
+      - "3307:3306"
+    volumes:
+      - core-db-data:/var/lib/mysql
+
+  core-service:
+    build: .
+    container_name: finwise-core-service
+    depends_on:
+      - core-db
+    environment:
+      CORE_MYSQL_URL: jdbc:mysql://core-db:3306/finwise_core?createDatabaseIfNotExist=true&serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true
+      CORE_MYSQL_USER: core_user
+      CORE_MYSQL_PASSWORD: core_password
+      CORE_SERVICE_PORT: 5010
+    ports:
+      - "5010:5010"
+
+volumes:
+  core-db-data:
+
