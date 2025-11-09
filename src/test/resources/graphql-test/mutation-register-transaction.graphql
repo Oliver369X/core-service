@@ -8,3 +8,6 @@ mutation RegisterTransaction($input: RegisterTransactionInput!) {
   }
 }
 
+
+
+

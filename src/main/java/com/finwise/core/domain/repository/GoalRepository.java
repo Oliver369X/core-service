@@ -10,3 +10,6 @@ public interface GoalRepository extends JpaRepository<Goal, Long> {
     List<Goal> findByUserId(String userId);
 }
 
+
+
+
